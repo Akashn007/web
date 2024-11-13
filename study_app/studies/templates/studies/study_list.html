@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Management</title>
+    <style>
+        .action-buttons a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px 10px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .view-btn {
+            background-color: #007BFF; /* Bootstrap primary color */
+        }
+        .edit-btn {
+            background-color: #28A745; /* Bootstrap success color */
+        }
+        .delete-btn {
+            background-color: #DC3545; /* Bootstrap danger color */
+        }
+        .add-study-btn {
+            background-color: #17A2B8; /* Bootstrap info color */
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h2>Study Management</h2>
+    <table border="1">
+        <tr>
+            <th>Study Name</th>
+            <th>Study Phase</th>
+            <th>Sponsor Name</th>
+            <th>Study Description</th>
+            <th>attachments</th>
+            <th>Actions</th>
+        </tr>
+        {% for study in studies %}
+        <tr>
+            <td>{{ study.study_name }}</td>
+            <td>{{ study.study_phase }}</td>
+            <td>{{ study.sponsor_name }}</td>
+            <td>{{ study.study_description }}</td>
+            <td>{% if study.attachments and study.attachments.name %}
+                <a href="{{study.attachments.url}}" download>{{study.attachments.name |default:"No file name"}}</a>
+                {% else %}
+                no attachments
+                {% endif %}
+            </td>
+           
+           
+            <td class="action-buttons">
+                <a class="view-btn" href="{% url 'view_study' study.pk %}">View</a>
+                <a class="edit-btn" href="{% url 'edit_study' study.pk %}">Edit</a>
+                <a class="delete-btn" href="{% url 'delete_study' study.pk %}" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+            
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No studies available.</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add-study-btn" href="{% url 'add_study' %}">Add Study</a>
+</body>
+</html>
